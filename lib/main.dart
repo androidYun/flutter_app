@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: EdgeInsets.fromLTRB(30.0, 50.0, 30.0, 0.0),
                 child: Container(
                   child: FlatButton(
-                    onPressed: _login,
+                    onPressed: jumpHome,
                     child: Text("登陆", style: TextStyle()),
                   ),
                 ))

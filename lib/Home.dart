@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/SelectHouseWare.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -103,7 +104,7 @@ class HomeItemView extends StatelessWidget {
         flex: 1,
         child: GestureDetector(
           onTap: () {
-            _jumpItem(content);
+            _jumpItem(context, content);
           },
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -121,12 +122,10 @@ class HomeItemView extends StatelessWidget {
         ));
   }
 
-  void _jumpItem(String item) {
-    switch (item) {
-      case "上架":
-        {
-
-        }
-    }
+  void _jumpItem(BuildContext context, String content) {
+    Navigator.push(context,
+        new MaterialPageRoute(builder: (BuildContext context) {
+      return new SelectHouseWare();
+    }));
   }
 }
