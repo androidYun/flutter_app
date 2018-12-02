@@ -28,6 +28,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^0.10.2
   json_serializable: ^1.5.1
+  shared_preferences: "^0.4.1"
 
 
     #网络请求
@@ -77,3 +78,5 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
   assets:
          - images/ic_main_shelf.png
+         - images/ic_login_logo.png
+         - images/ic_mine_header_image_holder.png

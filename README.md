@@ -4,5 +4,4 @@ A new Flutter application.
 
 ## Getting Started
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+###  Main是登陆页面  Home是首页   

@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(0, 150.0, 0.0, 100.0),
+              margin: EdgeInsets.fromLTRB(0, 100.0, 0.0, 100.0),
               child: Center(
                 child: Text(
                   "仓储系统PDA",
@@ -114,14 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   obscureText: true,
                 )),
-            Padding(
-                padding: EdgeInsets.fromLTRB(30.0, 50.0, 30.0, 0.0),
-                child: Container(
-                  child: FlatButton(
-                    onPressed: jumpHome,
-                    child: Text("登陆", style: TextStyle()),
-                  ),
-                ))
+            Container(
+              color: Colors.blue,
+              margin: EdgeInsets.fromLTRB(26.0, 60, 26.0, 0.0),
+              child: FlatButton(
+                onPressed: jumpHome,
+                child: Text("登陆", style: TextStyle()),
+              ),
+            ),
           ],
         ),
       ),
