@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_app/common/CommonApi.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -34,15 +36,43 @@ class HttpUtil {
       if (response.data.code == 200) {
         successCallBack(response.data);
       } else {
+        debugger();
         if (errorCallBack != null) {
           errorCallBack(response.data["errorMessage"]);
         }
       }
     } on DioError catch (e) {
+      debugger();
       if (errorCallBack != null) {
         errorCallBack(e.message);
       }
     } catch (e) {
+      debugger();
+      if (errorCallBack != null) {
+        errorCallBack(e.message);
+      }
+    }
+  }
+  void post(String url, data, Function successCallBack,
+      Function errorCallBack) async {
+    try {
+      var response = await dio.post(url, data: data);
+      print(response.data);
+      if (response.data.code == 200) {
+        successCallBack(response.data);
+      } else {
+        debugger();
+        if (errorCallBack != null) {
+          errorCallBack(response.data["errorMessage"]);
+        }
+      }
+    } on DioError catch (e) {
+      debugger();
+      if (errorCallBack != null) {
+        errorCallBack(e.message);
+      }
+    } catch (e) {
+      debugger();
       if (errorCallBack != null) {
         errorCallBack(e.message);
       }

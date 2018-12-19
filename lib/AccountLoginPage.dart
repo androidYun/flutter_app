@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/HttpUtil.dart';
 import 'package:flutter_app/MinePage.dart';
-import 'package:flutter_app/PhoneLoginPage.dart';
 import 'package:flutter_app/common/resources.dart';
 
 class AccountLoginPage extends StatefulWidget {
@@ -115,7 +117,9 @@ class _AccountLoginState extends State<AccountLoginPage> {
               alignment: Alignment.center,
               color: loginBtnColor,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  _login();
+                },
                 child: Text(
                   "登陆",
                   style: TextStyle(color: loginBtnTextColor),
@@ -135,10 +139,12 @@ class _AccountLoginState extends State<AccountLoginPage> {
                 ),
                 FlatButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        new MaterialPageRoute(builder: (BuildContext context) {
-                      return MinePage();
-                    }));
+                    _login();
+//                    Navigator.push(context,
+//                        new MaterialPageRoute(builder: (BuildContext context) {
+//                      return MinePage();
+//                    }
+//                    ));
                   },
                   child: Text("快捷登陆？"),
                 )
@@ -146,6 +152,56 @@ class _AccountLoginState extends State<AccountLoginPage> {
             )
           ],
         ),
+      ),
+    );
+  }
+  void _login() {
+    var userName = userNameController.text;
+    var passWord = passWordController.text;
+    if (userName.isEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              Dialog(
+                child: new TipView("密码不能为空"),
+              ));
+      return;
+    }
+    //判断密码
+    if (passWord.isEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              Dialog(
+                child: new TipView("密码不能为空"),
+              ));
+      return;
+    }
+    var loginReq = {"username": userName, "password": passWord};
+    HttpUtil.getInstance().post("http://47.96.53.33/wms-api/pda/login", loginReq, (data) {
+    }, (errorMsg) {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              Dialog(
+                child: new TipView(errorMsg),
+              ));
+    });
+  }
+}
+class TipView extends StatelessWidget {
+  final String content;
+
+  TipView(this.content);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+      child: Text(
+        content,
+        textAlign: TextAlign.center,
       ),
     );
   }

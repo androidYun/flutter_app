@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Home.dart';
 import 'package:flutter_app/HttpUtil.dart';
@@ -118,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.blue,
               margin: EdgeInsets.fromLTRB(26.0, 60, 26.0, 0.0),
               child: FlatButton(
-                onPressed: jumpHome,
+                onPressed: _login,
                 child: Text("登陆", style: TextStyle()),
               ),
             ),
@@ -131,8 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void jumpHome() {
     Navigator.push(context,
         new MaterialPageRoute(builder: (BuildContext context) {
-      return new Home();
-    }));
+          return new Home();
+        }));
   }
 
   void _login() {
@@ -141,16 +143,19 @@ class _MyHomePageState extends State<MyHomePage> {
     if (userName.isEmpty) {
       showDialog(
           context: context,
-          builder: (context) => Dialog(
+          builder: (context) =>
+              Dialog(
                 child: new TipView("密码不能为空"),
               ));
       return;
     }
+    debugger();
     //判断密码
     if (passWord.isEmpty) {
       showDialog(
           context: context,
-          builder: (context) => Dialog(
+          builder: (context) =>
+              Dialog(
                 child: new TipView("密码不能为空"),
               ));
       return;
@@ -161,7 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }, (errorMsg) {
       showDialog(
           context: context,
-          builder: (context) => Dialog(
+          builder: (context) =>
+              Dialog(
                 child: new TipView(errorMsg),
               ));
     });

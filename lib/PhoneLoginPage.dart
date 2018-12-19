@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/AccountLoginPage.dart';
+import 'package:flutter_app/HttpUtil.dart';
 import 'package:flutter_app/MinePage.dart';
 import 'package:flutter_app/common/resources.dart';
 
@@ -138,7 +139,9 @@ class _PhoneLoginState extends State<PhoneLoginPage> {
               alignment: Alignment.center,
               color: loginBtnColor,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  _login();
+                },
                 child: Text(
                   "登陆",
                   style: TextStyle(color: loginBtnTextColor),
@@ -171,4 +174,56 @@ class _PhoneLoginState extends State<PhoneLoginPage> {
       ),
     );
   }
+  void _login() {
+    var userName = userNameController.text;
+    var passWord = passWordController.text;
+    if (userName.isNotEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              Dialog(
+                child: new TipView("密码不能为空"),
+              ));
+      return;
+    }
+    //判断密码
+    if (passWord.isNotEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              Dialog(
+                child: new TipView("密码不能为空"),
+              ));
+      return;
+    }
+    var loginReq = {"username": userName, "password": passWord};
+    HttpUtil.getInstance().get("pda/login", loginReq, (data) {
+    }, (errorMsg) {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              Dialog(
+                child: new TipView(errorMsg),
+              ));
+    });
+  }
 }
+
+class TipView extends StatelessWidget {
+  final String content;
+
+  TipView(this.content);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+      child: Text(
+        content,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+
