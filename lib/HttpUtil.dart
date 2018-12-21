@@ -1,10 +1,10 @@
-import 'dart:developer';
-
-import 'package:flutter_app/common/CommonApi.dart';
-import 'package:dio/dio.dart';
 import 'dart:convert';
+import 'dart:developer';
+import 'package:dio/dio.dart';
+import 'package:flutter_app/common/CommonApi.dart';
 
 class HttpUtil {
+
   Dio dio;
 
   Options options;
@@ -23,7 +23,12 @@ class HttpUtil {
         baseUrl: CommonApi.baseUrl,
         connectTimeout: 5000,
         receiveTimeout: 3000,
-        headers: {"token": ""},
+        headers: {
+          "token": "",
+          "Platform": "Android",
+          "Version": 1440,
+          "Accept": "application/json"
+        },
         responseType: ResponseType.JSON);
     dio = new Dio(options);
   }
@@ -53,28 +58,27 @@ class HttpUtil {
       }
     }
   }
+
   void post(String url, data, Function successCallBack,
       Function errorCallBack) async {
     try {
       var response = await dio.post(url, data: data);
       print(response.data);
-      if (response.data.code == 200) {
-        successCallBack(response.data);
+      if (response.data['code'] == 200) {
+        successCallBack(response.data['data']);
       } else {
-        debugger();
         if (errorCallBack != null) {
-          errorCallBack(response.data["errorMessage"]);
+          errorCallBack(response.data["resultMessage"]);
         }
       }
     } on DioError catch (e) {
-      debugger();
       if (errorCallBack != null) {
         errorCallBack(e.message);
+        print("e");
       }
     } catch (e) {
-      debugger();
       if (errorCallBack != null) {
-        errorCallBack(e.message);
+        errorCallBack("请求错误异常");
       }
     }
   }

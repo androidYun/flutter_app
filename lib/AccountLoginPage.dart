@@ -118,7 +118,8 @@ class _AccountLoginState extends State<AccountLoginPage> {
               color: loginBtnColor,
               child: GestureDetector(
                 onTap: () {
-                  _login();
+                 print("ddd");
+                 _login();
                 },
                 child: Text(
                   "登陆",
@@ -155,14 +156,14 @@ class _AccountLoginState extends State<AccountLoginPage> {
       ),
     );
   }
+
   void _login() {
     var userName = userNameController.text;
     var passWord = passWordController.text;
     if (userName.isEmpty) {
       showDialog(
           context: context,
-          builder: (context) =>
-              Dialog(
+          builder: (context) => Dialog(
                 child: new TipView("密码不能为空"),
               ));
       return;
@@ -171,24 +172,24 @@ class _AccountLoginState extends State<AccountLoginPage> {
     if (passWord.isEmpty) {
       showDialog(
           context: context,
-          builder: (context) =>
-              Dialog(
+          builder: (context) => Dialog(
                 child: new TipView("密码不能为空"),
               ));
       return;
     }
-    var loginReq = {"username": userName, "password": passWord};
-    HttpUtil.getInstance().post("http://47.96.53.33/wms-api/pda/login", loginReq, (data) {
-    }, (errorMsg) {
+    var loginReq = {"userName": userName, "passWord": passWord};
+    HttpUtil.getInstance().post("sj-api/auth/login", loginReq, (data) {
+    },
+        (errorMsg) {
       showDialog(
           context: context,
-          builder: (context) =>
-              Dialog(
+          builder: (context) => Dialog(
                 child: new TipView(errorMsg),
               ));
     });
   }
 }
+
 class TipView extends StatelessWidget {
   final String content;
 
