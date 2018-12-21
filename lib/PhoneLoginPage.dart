@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/AccountLoginPage.dart';
 import 'package:flutter_app/HttpUtil.dart';
-import 'package:flutter_app/MinePage.dart';
 import 'package:flutter_app/common/resources.dart';
+import 'package:flutter_app/home/MinePage.dart';
+import 'package:flutter_app/resp/LoginResp.dart';
 
 class PhoneLoginPage extends StatefulWidget {
   @override
@@ -160,8 +163,9 @@ class _PhoneLoginState extends State<PhoneLoginPage> {
                   ),
                 ),
                 FlatButton(
-                  onPressed: (){
-                    Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context){
+                  onPressed: () {
+                    Navigator.push(context,
+                        new MaterialPageRoute(builder: (BuildContext context) {
                       return MinePage();
                     }));
                   },
@@ -174,14 +178,14 @@ class _PhoneLoginState extends State<PhoneLoginPage> {
       ),
     );
   }
+
   void _login() {
     var userName = userNameController.text;
     var passWord = passWordController.text;
     if (userName.isNotEmpty) {
       showDialog(
           context: context,
-          builder: (context) =>
-              Dialog(
+          builder: (context) => Dialog(
                 child: new TipView("密码不能为空"),
               ));
       return;
@@ -190,19 +194,20 @@ class _PhoneLoginState extends State<PhoneLoginPage> {
     if (passWord.isNotEmpty) {
       showDialog(
           context: context,
-          builder: (context) =>
-              Dialog(
+          builder: (context) => Dialog(
                 child: new TipView("密码不能为空"),
               ));
       return;
     }
     var loginReq = {"username": userName, "password": passWord};
     HttpUtil.getInstance().get("pda/login", loginReq, (data) {
+      debugger();
+      var loginResp = LoginResp.fromJson(data);
+      print("消息" + loginResp.data.accessToken);
     }, (errorMsg) {
       showDialog(
           context: context,
-          builder: (context) =>
-              Dialog(
+          builder: (context) => Dialog(
                 child: new TipView(errorMsg),
               ));
     });
@@ -226,4 +231,3 @@ class TipView extends StatelessWidget {
     );
   }
 }
-

@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_app/common/CommonApi.dart';
 
 class HttpUtil {
-
   Dio dio;
 
   Options options;
@@ -65,7 +64,11 @@ class HttpUtil {
       var response = await dio.post(url, data: data);
       print(response.data);
       if (response.data['code'] == 200) {
-        successCallBack(response.data['data']);
+        if (successCallBack != null) {
+          successCallBack(response.data);
+        } else {
+          errorCallBack("not implement interface");
+        }
       } else {
         if (errorCallBack != null) {
           errorCallBack(response.data["resultMessage"]);
@@ -74,11 +77,10 @@ class HttpUtil {
     } on DioError catch (e) {
       if (errorCallBack != null) {
         errorCallBack(e.message);
-        print("e");
       }
     } catch (e) {
       if (errorCallBack != null) {
-        errorCallBack("请求错误异常");
+        errorCallBack('Something really unknown: $e');
       }
     }
   }

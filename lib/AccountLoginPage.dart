@@ -1,10 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/HttpUtil.dart';
-import 'package:flutter_app/MinePage.dart';
+import 'package:flutter_app/common/SpUtils.dart';
 import 'package:flutter_app/common/resources.dart';
+import 'package:flutter_app/home/HomePage.dart';
+import 'package:flutter_app/Main.dart';
+import 'package:flutter_app/resp/LoginResp.dart';
 
 class AccountLoginPage extends StatefulWidget {
   @override
@@ -118,8 +119,8 @@ class _AccountLoginState extends State<AccountLoginPage> {
               color: loginBtnColor,
               child: GestureDetector(
                 onTap: () {
-                 print("ddd");
-                 _login();
+                  print("ddd");
+                  _login();
                 },
                 child: Text(
                   "登陆",
@@ -179,8 +180,13 @@ class _AccountLoginState extends State<AccountLoginPage> {
     }
     var loginReq = {"userName": userName, "passWord": passWord};
     HttpUtil.getInstance().post("sj-api/auth/login", loginReq, (data) {
-    },
-        (errorMsg) {
+      var loginResp = LoginResp.fromJson(data);
+      SpUtils.instance.setAccessToken(loginResp.data.accessToken);
+      Navigator.push(context,
+          new MaterialPageRoute(builder: (BuildContext context) {
+        return MainApp();
+      }));
+    }, (errorMsg) {
       showDialog(
           context: context,
           builder: (context) => Dialog(

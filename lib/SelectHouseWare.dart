@@ -60,7 +60,6 @@ class WareWidget extends State<StatefulWidget> {
                       setState(() {
                         selectIndex = index;
                       });
-                      SpUtils.instance.setWareHouseId(200);
                       Navigator.pop(context);
                     }),
               ))

@@ -7,13 +7,13 @@ class Home extends StatelessWidget {
     // TODO: implement build
     return MaterialApp(
       title: "PDA",
-      home: HomePage(title: "我爱我家"),
+      home: HomeTabPage(title: "我爱我家"),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key key, this.title}) : super(key: key);
+class HomeTabPage extends StatefulWidget {
+  const HomeTabPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
   State createState() => HomeState();
 }
 
-class HomeState extends State<HomePage> {
+class HomeState extends State<HomeTabPage> {
   String name = "张松";
 
   String houseWare = "测试维修仓库";

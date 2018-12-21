@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SpUtils {
-  final WAREHOUSE_ID_KEY = "WAREHOUSE_ID_KEY";
+  static const String _ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY";
 
   factory SpUtils() => _getInstance();
 
@@ -9,11 +9,7 @@ class SpUtils {
 
   static SpUtils _instance;
 
-  SharedPreferences sp;
-
-  SpUtils._internal() {
-    sp = SharedPreferences.getInstance() as SharedPreferences;
-  }
+  SpUtils._internal();
 
   static SpUtils _getInstance() {
     if (_instance == null) {
@@ -25,11 +21,13 @@ class SpUtils {
   /*
    *设置仓库id
    */
-  int getWarehouseId() {
-    return sp.getInt(WAREHOUSE_ID_KEY);
+  Future<String> getAccessToken() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getString(_ACCESS_TOKEN_KEY);
   }
 
-  setWareHouseId(int warehouseId) {
-    sp.setInt(WAREHOUSE_ID_KEY, warehouseId);
+  setAccessToken(String accessToken) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setString(_ACCESS_TOKEN_KEY, accessToken);
   }
 }

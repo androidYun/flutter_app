@@ -7,10 +7,6 @@ void main() => runApp(Welcome());
 class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-//    Navigator.push(context,
-//        new MaterialPageRoute(builder: (BuildContext context) {
-//      return AccountLogin();
-//    }));
     return MaterialApp(
       home: new AccountLoginPage(),
       routes: {"login": (BuildContext context) => AccountLoginPage()},
