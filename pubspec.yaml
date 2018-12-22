@@ -83,3 +83,6 @@ flutter:
          - arrow_right.png
          - ic_mine_xinji_entry.png
          - mine_01.png
+         - icon_transaction_new.png
+         - ic_notification_message.png
+         - ic_merchant_chat.png

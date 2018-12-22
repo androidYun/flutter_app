@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 class ColorT {
+  static const Color bg = Color(0xF5F5F5);
   static const Color theme_color = Color(0xFFFA482D);
   static const Color gray_33 = Color(0xFF333333); //51
   static const Color gray_66 = Color(0xFF666666); //102
