@@ -4,7 +4,8 @@ import 'package:flutter_app/HttpUtil.dart';
 import 'package:flutter_app/common/SpUtils.dart';
 import 'package:flutter_app/common/resources.dart';
 import 'package:flutter_app/home/HomePage.dart';
-import 'package:flutter_app/Main.dart';
+import 'package:flutter_app/MainApp.dart';
+import 'package:flutter_app/home/MinePage.dart';
 import 'package:flutter_app/resp/LoginResp.dart';
 
 class AccountLoginPage extends StatefulWidget {
@@ -114,19 +115,22 @@ class _AccountLoginState extends State<AccountLoginPage> {
             ),
             Container(
               margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
-              padding: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
               alignment: Alignment.center,
               color: loginBtnColor,
-              child: GestureDetector(
-                onTap: () {
-                  print("ddd");
-                  _login();
-                },
-                child: Text(
-                  "登陆",
-                  style: TextStyle(color: loginBtnTextColor),
-                ),
-              ),
+              child: Card(
+                  color: Colors.blue,
+                  elevation: 6.0,
+                  child: FlatButton(
+                      onPressed: (){
+                        _login();
+                      },
+                      child: new Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          "登陆",
+                          style: TextStyle(color: loginBtnTextColor),
+                        ),
+                      ))),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,12 +145,10 @@ class _AccountLoginState extends State<AccountLoginPage> {
                 ),
                 FlatButton(
                   onPressed: () {
-                    _login();
-//                    Navigator.push(context,
-//                        new MaterialPageRoute(builder: (BuildContext context) {
-//                      return MinePage();
-//                    }
-//                    ));
+                    Navigator.push(context,
+                        new MaterialPageRoute(builder: (BuildContext context) {
+                      return MinePage();
+                    }));
                   },
                   child: Text("快捷登陆？"),
                 )

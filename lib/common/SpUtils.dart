@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SpUtils {
   static const String _ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY";
 
+  static const String _PHONE_KEY = "_PHONE_KEY";
+
   factory SpUtils() => _getInstance();
 
   static SpUtils get instance => _getInstance();
@@ -19,7 +21,7 @@ class SpUtils {
   }
 
   /*
-   *设置仓库id
+   *token
    */
   Future<String> getAccessToken() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -30,4 +32,9 @@ class SpUtils {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString(_ACCESS_TOKEN_KEY, accessToken);
   }
+
+/**
+ *
+ */
+
 }
