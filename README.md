@@ -11,3 +11,8 @@ A new Flutter application.
    MainApp 是首页
 
    home 文件夹下面的页面是首页Tab相关的页面
+   
+ ### 圆角使用
+  像View 都可以用decoration 设置属性    ClipRRect可以设置图片属性
+ 
+ 
