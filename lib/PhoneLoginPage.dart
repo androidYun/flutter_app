@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/AccountLoginPage.dart';
 import 'package:flutter_app/HttpUtil.dart';
 import 'package:flutter_app/common/resources.dart';
 import 'package:flutter_app/home/MinePage.dart';
@@ -50,7 +47,7 @@ class _PhoneLoginState extends State<PhoneLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(),
+      appBar: new AppBar(title: Text("手机号登陆"),),
       body: Container(
         padding: EdgeInsets.fromLTRB(30.0, 100.0, 30.0, 0.0),
         color: Colors.white,
@@ -201,9 +198,8 @@ class _PhoneLoginState extends State<PhoneLoginPage> {
     }
     var loginReq = {"username": userName, "password": passWord};
     HttpUtil.getInstance().get("pda/login", loginReq, (data) {
-      debugger();
       var loginResp = LoginResp.fromJson(data);
-      print("消息" + loginResp.data.accessToken);
+      HttpUtil.getInstance().updateToken(loginResp.data.accessToken);
     }, (errorMsg) {
       showDialog(
           context: context,

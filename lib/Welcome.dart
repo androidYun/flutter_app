@@ -9,7 +9,7 @@ class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: new MainApp(),
+      home: new AccountLoginPage(),
       routes: {"login": (BuildContext context) => AccountLoginPage()},
     );
   }

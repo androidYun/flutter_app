@@ -31,7 +31,9 @@ class _AccountLoginState extends State<AccountLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(),
+      appBar: new AppBar(
+        title: Text("账号登陆"),
+      ),
       body: Container(
         padding: EdgeInsets.fromLTRB(30.0, 100.0, 30.0, 0.0),
         color: Colors.white,
@@ -121,7 +123,7 @@ class _AccountLoginState extends State<AccountLoginPage> {
                   color: Colors.blue,
                   elevation: 6.0,
                   child: FlatButton(
-                      onPressed: (){
+                      onPressed: () {
                         _login();
                       },
                       child: new Padding(
@@ -184,6 +186,7 @@ class _AccountLoginState extends State<AccountLoginPage> {
     HttpUtil.getInstance().post("sj-api/auth/login", loginReq, (data) {
       var loginResp = LoginResp.fromJson(data);
       SpUtils.instance.setAccessToken(loginResp.data.accessToken);
+      HttpUtil.getInstance().updateToken(loginResp.data.accessToken);
       Navigator.push(context,
           new MaterialPageRoute(builder: (BuildContext context) {
         return MainApp();

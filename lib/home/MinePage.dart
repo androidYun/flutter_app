@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/HttpUtil.dart';
 import 'package:flutter_app/common/resources.dart';
 
 class MinePage extends StatefulWidget {
@@ -10,30 +13,52 @@ class MinePage extends StatefulWidget {
 }
 
 class _MinePageState extends State<MinePage> {
+  var userInformation = UserInformation("", "", 0.0, 0.0);
+
+  @override
+  void initState() {
+    _onRefresh();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("个人中心"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            buildMineInformation(),
-            buildBuyerView(),
-            buildSellerView(),
-            bindWphView(),
-            buildPersonService(),
-          ],
+        appBar: AppBar(
+          title: Text("个人中心"),
         ),
-      ),
-    );
+        body: RefreshIndicator(
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                buildMineInformation(),
+                buildBuyerView(),
+                buildSellerView(),
+                bindWphView(),
+                buildPersonService(),
+              ],
+            ),
+            onRefresh: _onRefresh));
   }
 
-  /**
-   * 构建个人中心View
-   */
-  buildMineInformation() {
+  /// 下拉啥刷新方法
+  Future<Null> _onRefresh() async {
+    HttpUtil.getInstance().get("sj-api/account/detail", {}, (data) {
+      setState(() {
+        var account = data['data']["account"];
+        var accountPayment = data['data']["accountPayment"];
+        userInformation.name = accountPayment["accountName"];
+        userInformation.phone = account["accountNo"];
+        userInformation.accountAmount = account["amount"];
+        userInformation.foOuAmount = account["frozenAmount"];
+      });
+    }, (resultMessage) {});
+  }
+
+  ///构建个人中心View
+
+  Widget buildMineInformation() {
     return Container(
         decoration: BoxDecoration(
             color: ColorT.theme_color,
@@ -49,7 +74,7 @@ class _MinePageState extends State<MinePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "任凤枝",
+                      userInformation.name,
                       style: TextStyle(color: Colors.white),
                     ),
                     Padding(
@@ -62,7 +87,7 @@ class _MinePageState extends State<MinePage> {
                               color: Colors.white,
                             ),
                             Text(
-                              "187000000",
+                              userInformation.phone,
                               style: TextStyle(color: Colors.white),
                             )
                           ],
@@ -101,7 +126,7 @@ class _MinePageState extends State<MinePage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          "85730.28",
+                          "${userInformation.accountAmount}",
                           style: TextStyle(color: Colors.white, fontSize: 24.0),
                         ),
                         Text(
@@ -117,7 +142,7 @@ class _MinePageState extends State<MinePage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          "未设置",
+                          _getFuOuString(userInformation.foOuAmount),
                           style: TextStyle(color: Colors.white, fontSize: 34.0),
                         ),
                         Text(
@@ -136,10 +161,8 @@ class _MinePageState extends State<MinePage> {
         ));
   }
 
-  /**
-   * 构建买家View
-   */
-  buildBuyerView() {
+  ///构建买家View
+  Widget buildBuyerView() {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
@@ -178,10 +201,8 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-  /**
-   * 构建卖家View
-   */
-  buildSellerView() {
+  ///构建卖家View
+  Widget buildSellerView() {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
@@ -271,10 +292,8 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-  /**
-   * 唯品会
-   */
-  bindWphView() {
+  ///唯品会
+  Widget bindWphView() {
     return Container(
       color: Colors.blue,
       margin: EdgeInsets.all(16.0),
@@ -313,7 +332,7 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-  buildPersonService() {
+  Widget buildPersonService() {
     return Container(
       padding: EdgeInsets.all(16.0),
       child: Column(
@@ -388,4 +407,21 @@ class _MinePageState extends State<MinePage> {
         }
     }
   }
+
+  String _getFuOuString(double amount) {
+    if (amount != null && amount >= 0) {
+      return "$amount";
+    } else {
+      return "未设置";
+    }
+  }
+}
+
+class UserInformation {
+  String name = "";
+  String phone = "";
+  double accountAmount = 0.0;
+  double foOuAmount = 0.0;
+
+  UserInformation(this.name, this.phone, this.accountAmount, this.foOuAmount);
 }
