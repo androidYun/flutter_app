@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/HttpUtil.dart';
+import 'package:flutter_app/base/BaseState.dart';
+import 'package:flutter_app/common/HttpApi.dart';
 import 'package:flutter_app/common/resources.dart';
+import 'package:flutter_app/mine/SetPage.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -12,8 +15,15 @@ class MinePage extends StatefulWidget {
   }
 }
 
-class _MinePageState extends State<MinePage> {
+class _MinePageState extends BaseState<MinePage> {
   var userInformation = UserInformation("", "", 0.0, 0.0);
+
+  var buyerCountModel = BuyerCountModel();
+
+  //卖出的订单数量
+  var supplierOrdersCount = SupplierOrdersCount();
+
+  var supplierProductCount = SupplierProductCount();
 
   @override
   void initState() {
@@ -25,7 +35,21 @@ class _MinePageState extends State<MinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("个人中心"),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("个人中心"),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return SetPage();
+                  }));
+                },
+                icon: Icon(Icons.settings),
+              )
+            ],
+          ),
         ),
         body: RefreshIndicator(
             child: ListView(
@@ -47,11 +71,57 @@ class _MinePageState extends State<MinePage> {
     HttpUtil.getInstance().get("sj-api/account/detail", {}, (data) {
       setState(() {
         var account = data['data']["account"];
-        var accountPayment = data['data']["accountPayment"];
-        userInformation.name = accountPayment["accountName"];
-        userInformation.phone = account["accountNo"];
+        userInformation.name = account["roleName"];
+        userInformation.phone = account["mobile"];
         userInformation.accountAmount = account["amount"];
         userInformation.foOuAmount = account["frozenAmount"];
+      });
+    }, (resultMessage) {
+      toash(resultMessage);
+    });
+    HttpUtil.getInstance().get(HttpApi.Buyer_Order_Count, {}, (data) {
+      setState(() {
+        var buyCountData = data["data"];
+        for (var intue in buyCountData) {
+          switch (intue["status"]) {
+            //订购
+            case 0:
+              buyerCountModel.reserveCount = intue["quotationCount"];
+              break;
+            //待收货
+            case 1:
+              buyerCountModel.waitReceiptCount = intue["quotationCount"];
+              break;
+            //待付款
+            case 3:
+              buyerCountModel.waitPaymentCount = intue["quotationCount"];
+              break;
+            //待发货
+            case 4:
+              buyerCountModel.waitDeliverCount = intue["quotationCount"];
+              break;
+            //竞拍中
+            case 20:
+              buyerCountModel.acutionCount = intue["quotationCount"];
+              break;
+          }
+        }
+      });
+    }, (resultMessage) {});
+
+    HttpUtil.getInstance().get(HttpApi.Seller_Order_Count, {}, (data) {
+      setState(() {
+        var orderCount = data["data"]["supplierOrdersNums"];
+        supplierOrdersCount.needConfirmNum = orderCount["needConfirmNum"];
+        supplierOrdersCount.pendingDeliveryNum =
+            orderCount["pendingDeliveryNum"];
+        supplierOrdersCount.pendingReceiveNum = orderCount["pendingReceiveNum"];
+        supplierOrdersCount.tradingNum = orderCount["tradingNum"];
+        var productCount = data["data"]["supplierProductsNums"];
+        supplierProductCount.needConfirmNum = productCount["needConfirmNum"];
+        supplierProductCount.inspectedNum = productCount["inspectedNum"];
+        supplierProductCount.returningNum = productCount["returningNum"];
+        supplierProductCount.unsoldNum = productCount["unsoldNum"];
       });
     }, (resultMessage) {});
   }
@@ -189,10 +259,10 @@ class _MinePageState extends State<MinePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                buildItemView(60, "竞拍中", 0),
-                buildItemView(60, "待付款", 0),
-                buildItemView(60, "待发货", 0),
-                buildItemView(60, "待收货", 0),
+                buildItemView(buyerCountModel.acutionCount, "竞拍中", 0),
+                buildItemView(buyerCountModel.waitPaymentCount, "待付款", 0),
+                buildItemView(buyerCountModel.waitDeliverCount, "待发货", 0),
+                buildItemView(buyerCountModel.waitReceiptCount, "待收货", 0),
               ],
             ),
           )
@@ -230,10 +300,12 @@ class _MinePageState extends State<MinePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  buildItemView(60, "待发货", 0),
-                  buildItemView(60, "待收货", 0),
-                  buildItemView(60, "待确认", 0),
-                  buildItemView(60, "未售出", 0),
+                  buildItemView(
+                      supplierOrdersCount.pendingDeliveryNum, "待发货", 0),
+                  buildItemView(
+                      supplierOrdersCount.pendingReceiveNum, "待收货", 0),
+                  buildItemView(supplierOrdersCount.needConfirmNum, "待确认", 0),
+                  buildItemView(supplierOrdersCount.tradingNum, "未售出", 0),
                   Container(
                     color: Colors.black,
                     height: 50,
@@ -259,10 +331,10 @@ class _MinePageState extends State<MinePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  buildItemView(60, "待确认", 0),
-                  buildItemView(60, "已验货", 0),
-                  buildItemView(60, "退货中", 0),
-                  buildItemView(60, "未售出", 0),
+                  buildItemView(supplierProductCount.needConfirmNum, "待确认", 0),
+                  buildItemView(supplierProductCount.inspectedNum, "已验货", 0),
+                  buildItemView(supplierProductCount.returningNum, "退货中", 0),
+                  buildItemView(supplierProductCount.unsoldNum, "未售出", 0),
                   Container(
                     color: Colors.black,
                     height: 50,
@@ -424,4 +496,35 @@ class UserInformation {
   double foOuAmount = 0.0;
 
   UserInformation(this.name, this.phone, this.accountAmount, this.foOuAmount);
+}
+
+class BuyerCountModel {
+  //竞拍中
+  int acutionCount = 0;
+
+//我的订购
+  int reserveCount = 0;
+
+//待付款
+  int waitPaymentCount = 0;
+
+//待发货
+  int waitDeliverCount = 0;
+
+  //待收货
+  int waitReceiptCount = 0;
+}
+
+class SupplierOrdersCount {
+  int pendingDeliveryNum = 0;
+  int pendingReceiveNum = 0;
+  int needConfirmNum = 0;
+  int tradingNum = 0;
+}
+
+class SupplierProductCount {
+  int needConfirmNum = 0;
+  int inspectedNum = 0;
+  int returningNum = 0;
+  int unsoldNum = 0;
 }
