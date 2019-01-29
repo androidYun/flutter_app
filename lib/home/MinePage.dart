@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/BillPage.dart';
 import 'package:flutter_app/HttpUtil.dart';
 import 'package:flutter_app/base/BaseState.dart';
 import 'package:flutter_app/common/HttpApi.dart';
@@ -176,9 +177,17 @@ class _MinePageState extends BaseState<MinePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text(
-                    "交易明细",
-                    style: TextStyle(color: Colors.white),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return BillPage();
+                      }));
+                    },
+                    child: Text(
+                      "交易明细",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   Icon(
                     Icons.chevron_right,

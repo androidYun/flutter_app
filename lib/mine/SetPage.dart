@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/mine/SellerReturnAddressPage.dart';
 import 'package:flutter_app/mine/SetPasswordPage.dart';
 
 class SetPage extends StatefulWidget {
@@ -21,38 +22,28 @@ class SetState extends State<StatefulWidget> {
       body: Column(
         children: <Widget>[
           _buildItemView("设置"),
-          Divider(
-            indent: 16,
-            color: Colors.grey,
-          ),
+          const Divider(height: 1.0),
           _buildItemView("卖家退货地址"),
-          Divider(
-            indent: 16,
-            color: Colors.grey,
-          ),
+          const Divider(height: 1.0),
           _buildItemView("买家退货地址"),
-          Divider(
-            indent: 16,
-            color: Colors.grey,
-          ),
+          const Divider(height: 1.0),
           _buildItemView("经营地址"),
-          _buildItemFiveDivider(),
+          const Divider(height: 5.0),
           _buildItemView("清除缓存"),
-          _buildItemFiveDivider(),
+          const Divider(height: 5.0),
           _buildItemView("意见反馈"),
-          Divider(
-            indent: 16,
-            color: Colors.grey,
-          ),
+          const Divider(height: 1.0),
           _buildItemView("关于我们"),
-          _buildItemDivider()
         ],
       ),
     );
   }
 
   _buildItemView(String itemName) {
-    return GestureDetector(
+    return Container(
+      child: ListTile(
+        title: Text(itemName),
+        trailing: Icon(Icons.keyboard_arrow_right),
         onTap: () {
           switch (itemName) {
             case "设置":
@@ -61,18 +52,15 @@ class SetState extends State<StatefulWidget> {
                 return SetPasswordVerificationCodePage();
               }));
               break;
+            case "卖家退货地址":
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return SellerReturnAddressPage();
+              }));
           }
         },
-        child: Container(
-          padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(itemName),
-              Icon(Icons.keyboard_arrow_right)
-            ],
-          ),
-        ));
+      ),
+    );
   }
 
   _buildItemDivider() {

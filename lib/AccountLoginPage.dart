@@ -85,7 +85,7 @@ class _AccountLoginState extends State<AccountLoginPage> {
               margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
               alignment: Alignment.center,
               child: TextField(
-                keyboardType: TextInputType.emailAddress,
+                keyboardType: TextInputType.text,
                 obscureText: isPassword,
                 controller: passWordController,
                 onChanged: (userName) {
@@ -116,24 +116,22 @@ class _AccountLoginState extends State<AccountLoginPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
-              alignment: Alignment.center,
-              color: loginBtnColor,
-              child: Card(
-                  color: Colors.blue,
-                  elevation: 6.0,
-                  child: FlatButton(
-                      onPressed: () {
-                        _login();
-                      },
-                      child: new Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          "登陆",
-                          style: TextStyle(color: loginBtnTextColor),
-                        ),
-                      ))),
-            ),
+                margin: EdgeInsets.fromLTRB(0.0, 30, 0.0, 0.0),
+                decoration: BoxDecoration(
+                    color: loginBtnColor,
+                    borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                width: MediaQuery.of(context).size.width,
+                child: FlatButton(
+                    onPressed: () {
+                      _login();
+                    },
+                    child: new Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        "登陆",
+                        style: TextStyle(color: loginBtnTextColor),
+                      ),
+                    ))),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

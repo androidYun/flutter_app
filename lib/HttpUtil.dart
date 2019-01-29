@@ -59,12 +59,10 @@ class HttpUtil {
         }
       }
     } on DioError catch (e) {
-      debugger();
       if (errorCallBack != null) {
         errorCallBack(e.message);
       }
     } catch (e) {
-      debugger();
       if (errorCallBack != null) {
         errorCallBack(e.message);
       }
